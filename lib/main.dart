@@ -20,6 +20,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: FlexThemeData.light(scheme: FlexScheme.aquaBlue),
       darkTheme: FlexThemeData.dark(scheme: FlexScheme.aquaBlue),
       themeMode: ThemeMode.system,

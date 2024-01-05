@@ -19,11 +19,12 @@ class _OnePageState extends State<OnePage> {
   String openaiResponse = '';
   List emotion = ["😮‍💨", "🤔", "😭", "😝", "😩"];
   ScrollController _scrollController = ScrollController();
+  FocusNode _focusNode = FocusNode();
 
   void _scrollToBottom() {
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 400),
       curve: Curves.easeOut,
     );
   }
@@ -68,6 +69,7 @@ class _OnePageState extends State<OnePage> {
     );
 
     _scrollToBottom();
+    _focusNode.requestFocus();
 
     setState(() {
       whileLoading = false;
@@ -99,7 +101,7 @@ class _OnePageState extends State<OnePage> {
                     Text(
                       '나의 기록',
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -122,6 +124,7 @@ class _OnePageState extends State<OnePage> {
                           onTap: () {
                             showGeneralDialog(
                               context: context,
+                              barrierDismissible: false,
                               barrierColor: Colors.black54,
                               // space around dialog
                               transitionDuration:
@@ -194,7 +197,7 @@ class _OnePageState extends State<OnePage> {
                   Text(
                     '채팅:',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -228,43 +231,112 @@ class _OnePageState extends State<OnePage> {
                                     : Alignment.topRight,
                                 child: (whileLoading &&
                                         index == submittedTexts.length - 1)
-                                    ? Container(
-                                        margin:
-                                            const EdgeInsets.only(bottom: 10),
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: (index.isOdd)
-                                              ? Colors.blue.shade100
-                                              : Colors.blue,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: const Text(
-                                          ' •  •  • ',
-                                          maxLines: null,
-                                          softWrap: true,
-                                        ))
-                                    : Container(
-                                        margin:
-                                            const EdgeInsets.only(bottom: 10),
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: (index.isOdd)
-                                              ? Colors.blue.shade100
-                                              : Colors.blue,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: Text(
-                                          submittedTexts[index],
-                                          style: TextStyle(
-                                            color: (index.isOdd)
-                                                ? Colors.black
-                                                : Colors.white,
+                                    ? Row(
+                                        mainAxisAlignment: (index.isOdd)
+                                            ? MainAxisAlignment.start
+                                            : MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          if (index.isOdd)
+                                            const CircleAvatar(
+                                              backgroundColor:
+                                                  Colors.amberAccent,
+                                              child: Text(
+                                                '🤔',
+                                                style: TextStyle(fontSize: 30),
+                                              ),
+                                            )
+                                          else
+                                            const SizedBox.shrink(),
+                                          const SizedBox(
+                                            width: 10,
                                           ),
-                                          maxLines: null,
-                                          softWrap: true,
-                                        ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 40),
+                                            child: Container(
+                                                margin: const EdgeInsets.only(
+                                                    bottom: 10),
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.blue.shade100,
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                    topLeft: Radius.zero,
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10),
+                                                  ),
+                                                ),
+                                                child: const Text(
+                                                  ' •  •  • ',
+                                                  maxLines: null,
+                                                  softWrap: true,
+                                                )),
+                                          ),
+                                        ],
+                                      )
+                                    : Row(
+                                        mainAxisAlignment: (index.isOdd)
+                                            ? MainAxisAlignment.start
+                                            : MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          if (index.isOdd)
+                                            const CircleAvatar(
+                                              backgroundColor:
+                                                  Colors.amberAccent,
+                                              child: Text(
+                                                '🤔',
+                                                style: TextStyle(fontSize: 25),
+                                              ),
+                                            )
+                                          else
+                                            const SizedBox.shrink(),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 40),
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  bottom: 10),
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: (index.isOdd)
+                                                    ? Colors.blue.shade100
+                                                    : Colors.blue,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: (index.isOdd)
+                                                      ? Radius.zero
+                                                      : const Radius.circular(
+                                                          10),
+                                                  topRight: (index.isOdd)
+                                                      ? const Radius.circular(
+                                                          10)
+                                                      : Radius.zero,
+                                                  bottomLeft:
+                                                      const Radius.circular(10),
+                                                  bottomRight:
+                                                      const Radius.circular(10),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                submittedTexts[index],
+                                                style: TextStyle(
+                                                  color: (index.isOdd)
+                                                      ? Colors.black
+                                                      : Colors.white,
+                                                ),
+                                                maxLines: null,
+                                                softWrap: true,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                               )
                           ],
@@ -291,6 +363,7 @@ class _OnePageState extends State<OnePage> {
                       child: IgnorePointer(
                         ignoring: whileLoading,
                         child: TextField(
+                          focusNode: _focusNode,
                           controller: _controller,
                           decoration: InputDecoration(
                             hintText: (whileLoading) ? '답을 하고있어요...' : '',

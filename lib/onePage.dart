@@ -2,7 +2,7 @@ import 'package:chatgpt_test/main.dart';
 import 'package:flutter/material.dart';
 import 'package:dart_openai/dart_openai.dart';
 
-const apiKey = "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";
+const apiKey = "";
 const apiUrl = 'https://api.openai.com/v1/completions';
 
 class OnePage extends StatefulWidget {
@@ -23,7 +23,7 @@ class _OnePageState extends State<OnePage> {
   void _scrollToBottom() {
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
     );
   }
@@ -117,43 +117,49 @@ class _OnePageState extends State<OnePage> {
                     children: List.generate(
                       5,
                       (index) => Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
-                          child: GestureDetector(
-                              onTap: () {
-                                showGeneralDialog(
-                                  context: context,
-                                  barrierColor: Colors.black54,
-                                  // space around dialog
-                                  transitionDuration:
-                                      const Duration(milliseconds: 800),
-                                  transitionBuilder: (context, a1, a2, child) {
-                                    return ScaleTransition(
-                                        scale: CurvedAnimation(
-                                            parent: a1,
-                                            curve: Curves.elasticOut,
-                                            reverseCurve: Curves.easeOutCubic),
-                                        child: dialog(context, index));
-                                  },
-                                  pageBuilder: (BuildContext context,
-                                      Animation animation,
-                                      Animation secondaryAnimation) {
-                                    return Container();
-                                  },
-                                );
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            showGeneralDialog(
+                              context: context,
+                              barrierColor: Colors.black54,
+                              // space around dialog
+                              transitionDuration:
+                                  const Duration(milliseconds: 800),
+                              transitionBuilder: (context, a1, a2, child) {
+                                return ScaleTransition(
+                                    scale: CurvedAnimation(
+                                        parent: a1,
+                                        curve: Curves.elasticOut,
+                                        reverseCurve: Curves.easeOutCubic),
+                                    child: dialog(context, index));
                               },
-                              child: Stack(
-                                children: [
-                                  Image.asset(
-                                    "assets/images/${index + 1}.png",
-                                    width: 200, // Adjust width as needed
-                                    height: 200, // Adjust height as needed
-                                    fit: BoxFit.cover,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 75),
-                                    child: Center(
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.amberAccent,
+                              pageBuilder: (BuildContext context,
+                                  Animation animation,
+                                  Animation secondaryAnimation) {
+                                return Container();
+                              },
+                            );
+                          },
+                          child: Stack(
+                            children: [
+                              Image.asset(
+                                "assets/images/${index + 1}.png",
+                                width: 200, // Adjust width as needed
+                                height: 200, // Adjust height as needed
+                                fit: BoxFit.cover,
+                              ),
+                              Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: ClipOval(
+                                    child: Container(
+                                      width: 45,
+                                      height: 45,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.amberAccent,
+                                      ),
+                                      child: Center(
                                         child: Text(
                                           emotion[index],
                                           style: const TextStyle(fontSize: 30),
@@ -161,9 +167,13 @@ class _OnePageState extends State<OnePage> {
                                         ),
                                       ),
                                     ),
-                                  )
-                                ],
-                              ))),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -171,15 +181,30 @@ class _OnePageState extends State<OnePage> {
               const SizedBox(
                 height: 50,
               ),
-              Divider(
+              const Divider(
                 height: 10,
                 color: Colors.black,
               ),
               const SizedBox(
                 height: 50,
               ),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    '채팅:',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.black,
@@ -189,18 +214,6 @@ class _OnePageState extends State<OnePage> {
                 ),
                 child: Column(
                   children: [
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          '채팅:',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
                     if (submittedTexts.isNotEmpty)
                       SingleChildScrollView(
                         child: Column(
@@ -220,12 +233,13 @@ class _OnePageState extends State<OnePage> {
                                             const EdgeInsets.only(bottom: 10),
                                         padding: const EdgeInsets.all(10),
                                         decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey),
+                                          color: (index.isOdd)
+                                              ? Colors.blue.shade100
+                                              : Colors.blue,
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           ' •  •  • ',
                                           maxLines: null,
                                           softWrap: true,
@@ -235,13 +249,19 @@ class _OnePageState extends State<OnePage> {
                                             const EdgeInsets.only(bottom: 10),
                                         padding: const EdgeInsets.all(10),
                                         decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey),
+                                          color: (index.isOdd)
+                                              ? Colors.blue.shade100
+                                              : Colors.blue,
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
                                         child: Text(
                                           submittedTexts[index],
+                                          style: TextStyle(
+                                            color: (index.isOdd)
+                                                ? Colors.black
+                                                : Colors.white,
+                                          ),
                                           maxLines: null,
                                           softWrap: true,
                                         ),
@@ -292,7 +312,11 @@ class _OnePageState extends State<OnePage> {
                         height: 40,
                         color: Colors.blue,
                         child: IconButton(
-                          icon: Icon(Icons.send),
+                          icon: const Icon(
+                            Icons.send,
+                            color: Colors.white,
+                            size: 20,
+                          ),
                           onPressed: (whileLoading)
                               ? null
                               : () {
